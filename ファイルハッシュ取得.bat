@@ -1,7 +1,7 @@
 echo off
 
 rem 入力値（対象ディレクトリパス）を取得
-SET /P strInputDir="対象ディレクトリを入力してください: "
+SET /p strInputDir="対象ディレクトリを入力してください: "
 SET strInputDir="%strInputDir%"
 
 rem 現在時刻を取得
@@ -18,21 +18,21 @@ echo 対象ディレクトリ：%strInputDir%
 echo 出力ファイル：%strFP%
 pause
 
-rem ヘッダ文字列を出力
-echo フルパス	ディレクトリ	ファイル名	拡張子	ハッシュ値> %strFP%
-
 rem カレントディレクトリを設定
 cd %strInputDir%
 
+rem ヘッダ文字列を出力
+echo フルパス	ディレクトリ	ファイル名	拡張子	ハッシュ値> %strFP%
+
 rem 隠しファイルも対象にするためdirコマンドをfor内部で使用
 rem ファイル情報とハッシュ値を出力
-for /f "delims=" %%i in ('dir /b/s/a-d') do (
+for /f "delims=" %%i in ('dir /b /s /a-d') do (
     if %%~zi equ 0 (
-        rem ファイルが0バイトの場合ハッシュ値は固定で出力
+        rem ファイルが0バイトの場合ハッシュ値を固定で出力
         echo %%i	%%~dpi	%%~nxi	%%~xi	d41d8cd98f00b204e9800998ecf8427e>> %strFP%
     ) else (
         rem ファイルが0バイト以外の場合ハッシュ値を取得
-        for /F "skip=1 tokens=*" %%j in ('certutil -hashfile "%%i" MD5 ^| findstr /v [C]ertUtil') do (
+        for /f "skip=1 tokens=*" %%j in ('certutil -hashfile "%%i" MD5 ^| findstr /v [C]ertUtil') do (
             echo %%i	%%~dpi	%%~nxi	%%~xi	%%j>> %strFP%
         )
     )
