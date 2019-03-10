@@ -29,7 +29,7 @@ rem ファイル情報とハッシュ値を出力
 for /f "delims=" %%i in ('dir /b/s/a-d') do (
     if %%~zi equ 0 (
         rem ファイルが0バイトの場合ハッシュ値は固定で出力
-        echo %%k	%%~dpk	%%~nxk	%%~xk	d41d8cd98f00b204e9800998ecf8427e>> %strFP%
+        echo %%i	%%~dpi	%%~nxi	%%~xi	d41d8cd98f00b204e9800998ecf8427e>> %strFP%
     ) else (
         rem ファイルが0バイト以外の場合ハッシュ値を取得
         for /F "skip=1 tokens=*" %%j in ('certutil -hashfile "%%i" MD5 ^| findstr /v [C]ertUtil') do (
